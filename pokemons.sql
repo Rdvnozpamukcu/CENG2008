@@ -42,8 +42,7 @@ join pokemons as p on ps.pokemons_pokedex_number=p.pokedex_number
 where stats_name like "attack"
 group by name
 order by highest_attack desc
-limit 1
-;
+limit 1;
 
 /* q8 */
 
@@ -71,7 +70,7 @@ abilities as a
 join pokemon_abilities as pa on a.ability_id=pa.abilities_ability_id
 join pokemons as p on p.pokedex_number=pa.pokemons_pokedex_number
 where ability_name = 'Overgrow';
-/**********************************/
+/************/
 
 create view pokemon_tipleri_view as
 select name,type_name from types as t join pokemon_types as pt on t.type_id=pt.types_type_id
@@ -81,21 +80,45 @@ order by name asc;
 select * from pokemon_tipleri_view;
 
 
+/*OUT***/
+delimiter //
+create procedure pokenames(out namee varchar(50))
+begin
+select pokemons.name from pokemons
+where pokemons.name = @namee;
+end //
 
-/**********************************/
-/OUT/
-call countPokemons(@selam);
-select @selam;
-/**********************************/
+delimiter ;
 
-/INOUT/
-set @Name='Pikachu';
+call pokenames (@namee);
+set @namee = "Pikachu";
+select @namee;
 
-call is_legendary(@Name);
-select @Name;
+/***/
 
-/**********************************/
-/IN/
+/*INOUT*/
+delimiter //
+create procedure pokenames2(inout namee varchar(50))
+begin
+set @namee = "Abra";
+select pokemons.name from pokemons
+where pokemons.name = @namee;
+end //
 
-set @asd='Pikachu';
-call pokeStats(@asd);
+delimiter ;
+
+call pokenames2 (@namee);
+
+/**/
+
+/****IN***/
+DELIMITER //
+CREATE PROCEDURE AllPokenames3()
+BEGIN 
+Select name from pokemons;
+END//
+DELIMITER ;
+
+call AllPokenames3;
+
+/******/
